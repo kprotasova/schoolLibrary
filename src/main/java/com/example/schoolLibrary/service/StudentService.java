@@ -38,7 +38,7 @@ public class StudentService {
         return mapper.convertValue(studentRepository.findById(id), StudentInfoResponse.class);
     }
 
-    private Student getStudentById(Long id) {
+    public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElseThrow(() -> new CustomException("Student not found", HttpStatus.NOT_FOUND));
     }
 

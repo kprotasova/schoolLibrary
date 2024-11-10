@@ -1,13 +1,14 @@
 package com.example.schoolLibrary.service;
 
 import com.example.schoolLibrary.exceptions.CustomException;
+import com.example.schoolLibrary.model.db.entity.Book;
+import com.example.schoolLibrary.model.db.entity.Card;
 import com.example.schoolLibrary.model.db.entity.Loan;
-import com.example.schoolLibrary.model.db.repository.BookRepository;
 import com.example.schoolLibrary.model.db.repository.LoanRepository;
 import com.example.schoolLibrary.model.dto.request.LoanInfoRequest;
 import com.example.schoolLibrary.model.dto.request.LoanToBookRequest;
+import com.example.schoolLibrary.model.dto.request.LoanToCardRequest;
 import com.example.schoolLibrary.model.dto.response.LoanInfoResponse;
-import com.example.schoolLibrary.model.dto.response.StudentInfoResponse;
 import com.example.schoolLibrary.model.enums.LoanStatus;
 import com.example.schoolLibrary.utils.PaginationUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LoanService {
-    private final StudentService studentService;
+    private final CardService cardService;
     private final BookService bookService;
     public final ObjectMapper mapper;
     private final LoanRepository loanRepository;
@@ -44,7 +45,7 @@ public class LoanService {
         return mapper.convertValue(loanRepository.findById(id), LoanInfoResponse.class);
     }
 
-    private Loan getLoanById(Long id) {
+    public Loan getLoanById(Long id) {
         return loanRepository.findById(id).orElseThrow(() -> new CustomException("Loan not found", HttpStatus.NOT_FOUND));
     }
 
@@ -86,9 +87,25 @@ public class LoanService {
     }
 
     public void addLoanToBook(@Valid LoanToBookRequest request) {
+        Loan loan = loanRepository.findById(request.getLoanId()).orElseThrow(() -> new CustomException("Loan not found", HttpStatus.NOT_FOUND));
+        Book bookById = bookService.getBookById(request.getBookId());
+        bookById.getLoans().add(loan);
+
+        bookService.updateBookData(bookById);
+
+        loan.setBook(bookById);
+        loanRepository.save(loan);
     }
 
-    public void addLoanToCard(@Valid LoanToBookRequest request) {
+    public void addLoanToCard(@Valid LoanToCardRequest request) {
+        Loan loan = loanRepository.findById(request.getLoanId()).orElseThrow(() -> new CustomException("Loan not found", HttpStatus.NOT_FOUND));
+        Card cardById = cardService.getCardById(request.getCardId());
+        cardById.getLoans().add(loan);
+
+        cardService.updateCardData(cardById);
+
+        loan.setCard(cardById);
+        loanRepository.save(loan);
 
     }
 }

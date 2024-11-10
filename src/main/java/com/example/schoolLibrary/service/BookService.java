@@ -39,7 +39,7 @@ public class BookService {
         return mapper.convertValue(bookRepository.findById(id), BookInfoResponse.class);
     }
 
-    private Book getBookById(Long id) {
+    public Book getBookById(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new CustomException("Book not found", HttpStatus.NOT_FOUND));
     }
 
@@ -63,6 +63,10 @@ public class BookService {
         Book book = getBookById(id);
         book.setStatus(BookStatus.DELETED);
         bookRepository.save(book);
+    }
+
+    public Book updateBookData(Book book) {
+        return bookRepository.save(book);
     }
 
     public Page<BookInfoResponse> getAllBooks(Integer page, Integer perPage, String sort, Sort.Direction order, String filter) {

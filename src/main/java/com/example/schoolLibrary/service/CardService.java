@@ -1,6 +1,7 @@
 package com.example.schoolLibrary.service;
 
 import com.example.schoolLibrary.exceptions.CustomException;
+import com.example.schoolLibrary.model.db.entity.Book;
 import com.example.schoolLibrary.model.db.entity.Card;
 import com.example.schoolLibrary.model.db.repository.CardRepository;
 import com.example.schoolLibrary.model.dto.request.CardInfoRequest;
@@ -38,7 +39,7 @@ public class CardService {
         return mapper.convertValue(cardRepository.findById(id), CardInfoResponse.class);
     }
 
-    private Card getCardById(Long id) {
+    public Card getCardById(Long id) {
         return cardRepository.findById(id).orElseThrow(() -> new CustomException("Card not found", HttpStatus.NOT_FOUND));
     }
 
@@ -58,6 +59,10 @@ public class CardService {
         Card card = getCardById(id);
         card.setStatus(CardStatus.DELETED);
         cardRepository.save(card);
+    }
+
+    public Card updateCardData(Card card) {
+        return cardRepository.save(card);
     }
 
     public Page<CardInfoResponse> getAllCards(Integer page, Integer perPage, String sort, Sort.Direction order, String filter) {

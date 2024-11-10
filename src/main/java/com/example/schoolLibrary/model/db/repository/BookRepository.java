@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Optional<Book> findByIsbn(String isbn);
+    Optional<Book> findByISBN(String ISBN);
 
     @Query("select b from Book b where b.status <> :status")
     Page<Book> findAllByStatusNot(Pageable pageRequest, BookStatus status);

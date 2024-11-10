@@ -2,11 +2,13 @@ package com.example.schoolLibrary.controllers;
 
 import com.example.schoolLibrary.model.dto.request.LoanInfoRequest;
 import com.example.schoolLibrary.model.dto.request.LoanToBookRequest;
+import com.example.schoolLibrary.model.dto.request.LoanToCardRequest;
 import com.example.schoolLibrary.model.dto.response.LoanInfoResponse;
 import com.example.schoolLibrary.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Tag(name = "Заемы")
 @RestController
 @RequestMapping("/api/loans")
 @RequiredArgsConstructor
@@ -53,7 +56,7 @@ public class LoanController {
     @Operation(summary = "Получить список заемов книг")
     public Page<LoanInfoResponse> getAllLoans(@RequestParam(defaultValue = "1") Integer page,
                                               @RequestParam(defaultValue = "10") Integer perPage,
-                                              @RequestParam(defaultValue = "lastName") String sort,
+                                              @RequestParam(defaultValue = "id") String sort,
                                               @RequestParam(defaultValue = "ASC") Sort.Direction order,
                                               @RequestParam(required = false) String filter) {
 
@@ -68,7 +71,7 @@ public class LoanController {
 
     @PostMapping("/loanToCard")
     @Operation(summary = "Добавить заем книги карточке")
-    public void addLoanToCard(@RequestBody @Valid LoanToBookRequest request ){
+    public void addLoanToCard(@RequestBody @Valid LoanToCardRequest request ){
         loanService.addLoanToCard(request);
     }
 

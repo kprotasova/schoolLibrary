@@ -6,11 +6,13 @@ import com.example.schoolLibrary.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Карточки")
 @RestController
 @RequestMapping("/api/cards")
 @RequiredArgsConstructor
@@ -50,7 +52,7 @@ public class CardController {
     @Operation(summary = "Получить список карточек")
     public Page<CardInfoResponse> getAllCards(@RequestParam(defaultValue = "1") Integer page,
                                               @RequestParam(defaultValue = "10") Integer perPage,
-                                              @RequestParam(defaultValue = "lastName") String sort,
+                                              @RequestParam(defaultValue = "cardNumber") String sort,
                                               @RequestParam(defaultValue = "ASC") Sort.Direction order,
                                               @RequestParam(required = false) String filter) {
 
